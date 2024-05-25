@@ -1,0 +1,15 @@
+server:
+  port: 8130 #服务器端口
+
+spring:
+  profiles:
+    active: dev #环境配置
+  application:
+    name: service-oss
+
+aliyun:
+  oss:
+    endpoint: oss-cn-beijing.aliyuncs.com
+    keyId: ${ALIYUN_OSS_KEY_ID}
+    keySecret: ${ALIYUN_OSS_KEY_SECRET}
+    bucketName: yygh-0330haha

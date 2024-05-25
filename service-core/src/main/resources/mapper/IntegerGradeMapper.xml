@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chen.srb.core.mapper.IntegerGradeMapper">
+
+    <select id="list" resultType="com.chen.srb.core.pojo.entity.IntegralGrade">
+
+        select A.id,A.integral_start,A.integral_end,A.borrow_amount,A.create_time,A.update_time,A.is_deleted from integral_grade as A where is_deleted = 0
+
+    </select>
+    
+    <update id="removeById">
+        update integral_grade
+        set is_deleted = 1,update_time = now()
+        where id = #{id}
+    </update>
+
+    <insert id="save">
+        insert into
+            integral_grade(integral_start, integral_end, borrow_amount, create_time, update_time, is_deleted)
+        VALUES(#{integralStart},#{integralEnd},#{borrowAmount},now(),now(),0)
+    </insert>
+
+    <select id="getById" resultType="com.chen.srb.core.pojo.entity.IntegralGrade">
+        select
+            A.id,A.integral_start,A.integral_end,A.borrow_amount,A.create_time,A.update_time
+        from
+            integral_grade A
+        where id = #{id} and is_deleted = 0;
+    </select>
+
+    <update id="updateById">
+        update integral_grade
+        set integral_start = #{integralStart} ,
+            integral_end = #{integralEnd} ,
+            borrow_amount = #{borrowAmount} ,
+            update_time = now()
+        where id = #{id}
+        and is_deleted = 0
+    </update>
+</mapper>
