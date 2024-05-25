@@ -56,6 +56,12 @@ public class UserInfoController {
     }
 
 
+    /**
+     * 会员登陆
+     * @param loginDTO
+     * @param request
+     * @return
+     */
     @ApiOperation("会员登录")
     @PostMapping("/login")
     public R login(@RequestBody LoginDTO loginDTO, HttpServletRequest request){
@@ -74,6 +80,11 @@ public class UserInfoController {
     }
 
 
+    /**
+     * 登录校验token
+     * @param request
+     * @return
+     */
     @GetMapping("/checkToken")
     public R checkToken(HttpServletRequest request){
 
@@ -86,4 +97,6 @@ public class UserInfoController {
             return R.setResult(ResponseEnum.LOGIN_AUTH_ERROR);
         }
     }
+
+
 }

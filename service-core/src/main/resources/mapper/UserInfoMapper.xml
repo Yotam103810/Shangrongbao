@@ -24,4 +24,6 @@
         and A.password = #{password}
         and A.user_type = #{userType}
     </select>
+
+
 </mapper>

@@ -1,5 +1,11 @@
 package com.chen.srb.core.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.chen.common.exception.Assert;
 import com.chen.common.exception.BusinessException;
 import com.chen.common.result.ResponseEnum;
@@ -13,11 +19,15 @@ import com.chen.srb.core.mapper.UserInfoMapper;
 import com.chen.srb.core.pojo.entity.UserAccount;
 import com.chen.srb.core.pojo.entity.UserInfo;
 import com.chen.srb.core.pojo.entity.UserLoginRecord;
+import com.chen.srb.core.pojo.query.UserInfoQuery;
 import com.chen.srb.core.pojo.vo.UserInfoVO;
 import com.chen.srb.core.service.UserInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -31,6 +41,9 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Autowired
     private UserLoginRecordMapper userLoginRecordMapper;
+
+    @Resource
+    private BaseMapper baseMapper;
 
     @Override
     public void register(RegisterDTO registerDTO) {
@@ -90,5 +103,25 @@ public class UserInfoServiceImpl implements UserInfoService {
         userInfoVO.setUserType(userType);
 
         return userInfoVO;
+    }
+
+    @Override
+    public IPage<UserInfo> listPage(Page<UserInfo> pageParam, UserInfoQuery userInfoQuery) {
+        String mobile = userInfoQuery.getMobile();
+        Integer userType = userInfoQuery.getUserType();
+        Integer status = userInfoQuery.getStatus();
+
+        //判断查询条件为不为空
+        if(userInfoQuery == null){
+            return baseMapper.selectPage(pageParam,null);
+        }
+
+        QueryWrapper<UserInfo> userInfoQueryWrapper = new QueryWrapper<>();
+        userInfoQueryWrapper
+                .eq(StringUtils.isNotBlank(mobile), "mobile", mobile)
+                .eq(status != null, "status", userInfoQuery.getStatus())
+                .eq(userType != null, "user_type", userType);
+        return baseMapper.selectPage(pageParam,userInfoQueryWrapper);
+
     }
 }
