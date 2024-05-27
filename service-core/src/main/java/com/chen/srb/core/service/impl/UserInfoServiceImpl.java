@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.chen.common.exception.Assert;
 import com.chen.common.exception.BusinessException;
+import com.chen.common.result.R;
 import com.chen.common.result.ResponseEnum;
 import com.chen.common.util.MD5Util;
 import com.chen.srb.base.util.JwtUtils;
@@ -139,5 +140,11 @@ public class UserInfoServiceImpl implements UserInfoService {
     @Override
     public void lock(Long id, Integer status) {
         userInfoMapper.lock(id,status);
+    }
+
+    @Override
+    public boolean checkMobile(String mobile) {
+        int count = userInfoMapper.selectCount(mobile);
+        return count > 0;
     }
 }

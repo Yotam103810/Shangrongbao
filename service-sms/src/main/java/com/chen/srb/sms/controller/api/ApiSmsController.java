@@ -1,11 +1,13 @@
 package com.chen.srb.sms.controller.api;
 
 
+import com.chen.common.exception.Assert;
 import com.chen.common.exception.BusinessException;
 import com.chen.common.result.R;
 import com.chen.common.result.ResponseEnum;
 import com.chen.common.util.RandomUtils;
 import com.chen.common.util.RegexValidateUtils;
+import com.chen.srb.sms.client.CoreUserInfoClient;
 import com.chen.srb.sms.service.SmsService;
 import com.chen.srb.sms.util.SmsProperties;
 import io.swagger.annotations.Api;
@@ -34,6 +36,9 @@ public class ApiSmsController {
     @Autowired
     private RedisTemplate redisTemplate;
 
+    @Autowired
+    private CoreUserInfoClient coreUserInfoClient;
+
     /*
     接收前端的电话号码，发送短信验证码  ，判断号码不能为空，符合正则表达式
      */
@@ -51,6 +56,9 @@ public class ApiSmsController {
            throw new BusinessException(ResponseEnum.MOBILE_ERROR);
         }
 
+        //是否注册
+        boolean result = coreUserInfoClient.checkMobile(mobile);
+        Assert.isTrue(result == false, ResponseEnum.MOBILE_EXIST_ERROR);
 
         //生成验证码
         String code = RandomUtils.getFourBitRandom();

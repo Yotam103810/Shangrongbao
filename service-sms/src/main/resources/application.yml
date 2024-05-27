@@ -26,20 +26,20 @@ spring:
       discovery:
         server-addr: localhost:8848 # nacos服务地址
 
-#feign:
-#  client:
-#    config:
-#      default:
-#        connectTimeout: 10000 #连接超时配置
-#        readTimeout: 600000 #执行超时配置
-#  #开启Feign对Sentinel的支持
-#  #feign:
-#  sentinel:
-#    enabled: true
-#
-#logging:
-#  level:
-#    com.atguigu.srb.sms.client.CoreUserInfoClient: DEBUG #以什么级别监控哪个接口
+feign:
+  client:
+    config:
+      default:
+        connectTimeout: 10000 #连接超时配置
+        readTimeout: 600000 #执行超时配置
+#  开启Feign对Sentinel的支持
+#  feign:
+  sentinel:
+    enabled: true
+
+logging:
+  level:
+    com.chen.srb.sms.client.CoreUserInfoClient: DEBUG #以什么级别监控哪个接口
 
 #阿里云短信
 aliyun:

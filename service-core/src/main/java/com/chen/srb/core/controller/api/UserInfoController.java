@@ -98,5 +98,14 @@ public class UserInfoController {
         }
     }
 
-
+    /**
+     * 校验手机号是否注册
+     * @param mobile
+     * @return
+     */
+    @ApiOperation("校验手机号是否注册")
+    @GetMapping("/checkMobile/{mobile}")
+    public boolean checkMobile(@PathVariable("mobile") String mobile){
+        return userInfoService.checkMobile(mobile);
+    }
 }
