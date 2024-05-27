@@ -12,6 +12,7 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -81,5 +82,25 @@ public class UserInfo implements Serializable {
     @TableLogic
     private Boolean deleted;
 
+    /**
+     * 当前页
+     */
+    private Integer pageNum;
+    /**
+     * 每页数量
+     */
+    private Integer pageSize;
+    /**
+     * 总过多少条数据
+     */
+    private Integer totalCount;
+    /**
+     * 总共都多少页
+     */
+    private Integer pageTotal;
+    /**
+     * 当前页对象
+     */
+    private List<UserInfo> UserInfoList;
 
 }

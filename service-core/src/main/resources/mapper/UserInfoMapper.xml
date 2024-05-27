@@ -17,7 +17,7 @@
     </select>
 
     <select id="selectUser" resultType="com.chen.srb.core.pojo.entity.UserInfo">
-        select A.user_type,A.mobile,A.password,A.nick_name,A.name,A.id_card,A.email,A.openid,A.head_img,A.bind_status,A.borrow_auth_status,A.bind_code,A.integral,A.status
+        select A.id,A.user_type,A.mobile,A.password,A.nick_name,A.name,A.id_card,A.email,A.openid,A.head_img,A.bind_status,A.borrow_auth_status,A.bind_code,A.integral,A.status
         from user_info A
         where
             A.mobile = #{mobile}
@@ -25,5 +25,17 @@
         and A.user_type = #{userType}
     </select>
 
+    <update id="lock">
+        update user_info
+            set status = #{status}
+        where user_info.id = #{id}
+    </update>
 
+    <select id="listPage" resultType="com.chen.srb.core.pojo.entity.UserInfo">
+        select A.id,A.user_type,A.mobile,A.name,A.id_card,A.integral,A.create_time,A.bind_code,A.status
+        from user_info A
+        where A.user_type = #{userType}
+        and A.mobile = #{monile}
+        and A.status = #{status}
+    </select>
 </mapper>

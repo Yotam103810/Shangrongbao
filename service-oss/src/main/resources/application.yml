@@ -13,3 +13,8 @@ aliyun:
     keyId: ${ALIYUN_OSS_KEY_ID}
     keySecret: ${ALIYUN_OSS_KEY_SECRET}
     bucketName: yygh-0330haha
+
+  cloud:
+    nacos:
+    discovery:
+    server-addr: localhost:8848 # nacos服务地址

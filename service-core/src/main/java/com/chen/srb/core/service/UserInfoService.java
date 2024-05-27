@@ -13,5 +13,7 @@ public interface UserInfoService {
 
     UserInfoVO login(LoginDTO loginDTO, String ip);
 
-    IPage<UserInfo> listPage(Page<UserInfo> pageParam, UserInfoQuery userInfoQuery);
+    UserInfo listPage(Integer pageNum,Integer pageSize, UserInfoQuery userInfoQuery);
+
+    void lock(Long id, Integer status);
 }

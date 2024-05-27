@@ -25,18 +25,30 @@ public class AdminUserInfoController {
     /**
      * 根据查询条件获取UserInfo分页列表
      * @param userInfoQuery
-     * @param page
-     * @param limit
+     * @param pageSize
+     * @param pageNum
      * @return
      */
     @ApiOperation("获取会员分页列表")
-    @GetMapping("/list/{page}/{limit}")
+    @GetMapping("/list/{pageNum}/{pageSize}")
     public R list(@RequestBody UserInfoQuery userInfoQuery,
-                  @PathVariable Long page,
-                  @PathVariable Long limit){
-        Page<UserInfo> pageParam = new Page<>(page, limit);
-        IPage<UserInfo> listPage = userInfoService.listPage(pageParam,userInfoQuery);
-        return R.ok().data("pageModel",listPage);
+                  @PathVariable("pageNum") Integer pageNum,
+                  @PathVariable("pageSize") Integer pageSize){
+        UserInfo userInfo = userInfoService.listPage(pageNum,pageSize, userInfoQuery);
+        return R.ok().data("pageModel",userInfo);
+    }
 
+    /**
+     * 会员锁定和解锁
+     * @param id
+     * @param status
+     * @return
+     */
+    @ApiOperation("锁定和解锁")
+    @PutMapping("/lock/{id}/{status}")
+    public R lock(@PathVariable("id") Long id,
+                  @PathVariable("status") Integer status){
+        userInfoService.lock(id,status);
+        return R.ok().message(status == 1 ? "解锁成功":"锁定成功");
     }
 }

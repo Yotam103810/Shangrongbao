@@ -21,4 +21,7 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
     UserInfo selectUser(@Param("mobile") String mobile,@Param("password") String password,@Param("userType") Integer userType);
 
 
+    void lock(@Param("id") Long id,@Param("status") Integer status);
+
+    List<UserInfo> listPage(@Param("monile") String mobile,@Param("userType") Integer userType,@Param("status") Integer status);
 }

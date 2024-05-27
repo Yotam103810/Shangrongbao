@@ -22,6 +22,7 @@ import com.chen.srb.core.pojo.entity.UserLoginRecord;
 import com.chen.srb.core.pojo.query.UserInfoQuery;
 import com.chen.srb.core.pojo.vo.UserInfoVO;
 import com.chen.srb.core.service.UserInfoService;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -106,22 +107,37 @@ public class UserInfoServiceImpl implements UserInfoService {
     }
 
     @Override
-    public IPage<UserInfo> listPage(Page<UserInfo> pageParam, UserInfoQuery userInfoQuery) {
+    public UserInfo listPage(Integer pageNum,Integer pageSize, UserInfoQuery userInfoQuery) {
         String mobile = userInfoQuery.getMobile();
         Integer userType = userInfoQuery.getUserType();
         Integer status = userInfoQuery.getStatus();
-
+        UserInfo userInfo = new UserInfo();
         //判断查询条件为不为空
         if(userInfoQuery == null){
-            return baseMapper.selectPage(pageParam,null);
+             return userInfo;
         }
 
-        QueryWrapper<UserInfo> userInfoQueryWrapper = new QueryWrapper<>();
-        userInfoQueryWrapper
-                .eq(StringUtils.isNotBlank(mobile), "mobile", mobile)
-                .eq(status != null, "status", userInfoQuery.getStatus())
-                .eq(userType != null, "user_type", userType);
-        return baseMapper.selectPage(pageParam,userInfoQueryWrapper);
+        List<UserInfo> list = userInfoMapper.listPage(mobile,userType,status);
+        /*
+         此方法为集合分片：
+         pageSize: 前端传参（每页数量）
+          Lists.partition：按照每页数量将集合进行分片，一个共多少片就是一共有多少页partition.size()
+         */
+        List<List<UserInfo>> partition = Lists.partition(list, pageSize);
+        // 当前页
+        userInfo.setPageSize(pageSize);
+        userInfo.setPageNum(pageNum);
+        userInfo.setPageTotal(partition.size());
+        userInfo.setTotalCount(list.size());
+        // 因为partition是集合，集合的第一个指针是0  所以要-1
+        userInfo.setUserInfoList(partition.get(pageNum-1));
+        return userInfo;
 
+
+    }
+
+    @Override
+    public void lock(Long id, Integer status) {
+        userInfoMapper.lock(id,status);
     }
 }
