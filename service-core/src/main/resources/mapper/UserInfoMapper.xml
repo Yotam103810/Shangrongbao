@@ -38,4 +38,20 @@
         and A.mobile = #{monile}
         and A.status = #{status}
     </select>
+
+    <select id="selectUserById" resultType="com.chen.srb.core.pojo.entity.UserInfo">
+        select A.id,A.user_type,A.mobile,A.password,A.nick_name,A.name,A.id_card,A.email,A.openid,A.head_img,A.bind_status,A.borrow_auth_status,A.bind_code,A.integral,A.status,A.create_time,A.update_time,A.is_deleted
+        from user_info A
+        where A.id = #{id} and A.is_deleted = 0
+    </select>
+
+    <update id="updateUserInfo">
+        update user_info A
+            set A.bind_code = #{bindCode},
+                A.name = #{name},
+                A.id_card = #{idCard},
+                A.bind_status = #{bindStatus},
+                A.update_time = #{updateTime}
+        where A.id = #{id}
+    </update>
 </mapper>

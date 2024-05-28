@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chen.srb.core.mapper.UserBindMapper">
+
+    <select id="selectCount" resultType="com.chen.srb.core.pojo.entity.UserBind">
+        select
+            A.id,A.user_id,A.name,A.name,A.id_card,A.bank_no,A.bank_type,A.mobile,A.bind_code,A.status,A.create_time,A.update_time,A.is_deleted
+        from user_bind A
+        where A.id_card = #{idCard}
+          and is_deleted = 0
+    </select>
+
+    <select id="selectUserBind" resultType="com.chen.srb.core.pojo.entity.UserBind">
+        select
+            A.id,A.user_id,A.name,A.name,A.id_card,A.bank_no,A.bank_type,A.mobile,A.bind_code,A.status,A.create_time,A.update_time,A.is_deleted
+        from user_bind A
+        where A.user_id = #{userId}
+          and is_deleted = 0
+    </select>
+
+    <insert id="insertUserBind">
+        insert into user_bind(user_id,name,id_card,bank_no,bank_type,mobile,bind_code,status,create_time,update_time,is_deleted)
+            values (#{userId},#{name},#{idCard},#{bankNo},#{bankType},#{mobile},#{bindCode},#{status},now(),now(),0)
+    </insert>
+
+    <update id="updateUserBind">
+        update user_bind A
+            set A.name = #{name},
+                A.id_card = #{idCard},
+                A.bank_no = #{bankNo},
+                A.bank_type = #{bankType},
+                A.mobile = #{mobile},
+                A.update_time = now()
+        where A.user_id = #{userId} and A.is_deleted = 0
+    </update>
+</mapper>
