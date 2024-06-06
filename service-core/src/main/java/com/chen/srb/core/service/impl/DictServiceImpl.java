@@ -82,4 +82,11 @@ public class DictServiceImpl implements DictService {
         }
         return false;
     }
+
+    @Override
+    public List<Dict> findByDictCode(String dictCode) {
+        Long dictId = dictMapper.getIdByDictCode(dictCode);
+        List<Dict> list = dictMapper.listByParentId(dictId);
+        return list;
+    }
 }

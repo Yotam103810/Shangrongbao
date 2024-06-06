@@ -21,4 +21,8 @@
     <select id="selectCount" resultType="int">
         select count(id) from dict where parent_id = #{parentId}
     </select>
+
+    <select id="getIdByDictCode" resultType="java.lang.Long">
+        select D.id from dict D where D.dict_code = #{dictCode} and D.is_deleted = 0
+    </select>
 </mapper>

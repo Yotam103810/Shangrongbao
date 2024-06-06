@@ -51,7 +51,8 @@
                 A.name = #{name},
                 A.id_card = #{idCard},
                 A.bind_status = #{bindStatus},
-                A.update_time = #{updateTime}
+                A.update_time = #{updateTime},
+                A.borrow_auth_status = #{borrowAuthStatus}
         where A.id = #{id}
     </update>
 </mapper>

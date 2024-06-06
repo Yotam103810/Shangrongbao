@@ -11,4 +11,6 @@ public interface DictService {
     List listDictData();
 
     List<Dict> listByParentId(Long parentId);
+
+    List<Dict> findByDictCode(String dictCode);
 }

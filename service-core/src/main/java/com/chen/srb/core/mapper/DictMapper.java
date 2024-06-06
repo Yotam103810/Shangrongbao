@@ -16,4 +16,7 @@ public interface DictMapper {
     List<Dict> listByParentId(@Param("parentId") Long parentId);
 
     int selectCount(@Param("parentId") Long id);
+
+
+    Long getIdByDictCode(@Param("dictCode") String dictCode);
 }

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chen.srb.core.mapper.BorrowerMapper">
+
+    <insert id="insertBorrower" keyProperty="borrower.id" useGeneratedKeys="true">
+        insert into borrower (user_id,name,id_card,mobile,sex,age,education,is_marry,industry,income,return_source,contacts_name,contacts_mobile,contacts_relation,status,create_time,update_time,is_deleted)
+            values (#{borrower.userId},#{borrower.name},#{borrower.idCard},
+                    #{borrower.mobile},#{borrower.sex},#{borrower.age},
+                    #{borrower.education},#{borrower.marry},#{borrower.industry},#{borrower.income},
+                    #{borrower.returnSource},#{borrower.contactsName},#{borrower.contactsMobile},
+                    #{borrower.contactsRelation},#{borrower.status},now(),now(),0)
+    </insert>
+</mapper>
