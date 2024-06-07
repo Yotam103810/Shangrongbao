@@ -10,4 +10,8 @@
                     #{borrower.returnSource},#{borrower.contactsName},#{borrower.contactsMobile},
                     #{borrower.contactsRelation},#{borrower.status},now(),now(),0)
     </insert>
+
+    <select id="getBorrowerStatus" resultType="java.lang.Object">
+        select B.status from borrower B where B.user_id = #{userId} and B.is_deleted = 0
+    </select>
 </mapper>

@@ -1,6 +1,5 @@
 package com.chen.srb.core.controller.api;
 
-import com.chen.common.exception.Assert;
 import com.chen.common.result.R;
 import com.chen.srb.base.util.JwtUtils;
 import com.chen.srb.core.pojo.dto.BorrowerDTO;
@@ -37,4 +36,17 @@ public class BorrowerController {
     }
 
 
+    /**
+     * 根据token获取当前用户id查询借款人表获取当前认证状态
+     * @param httpServletRequest
+     * @return
+     */
+    @ApiOperation("获取借款人认证状态")
+    @GetMapping("/auth/getBorrowerStatus")
+    public R getBorrowerStatus(HttpServletRequest httpServletRequest){
+        String token = httpServletRequest.getHeader("token");
+        Long userId = JwtUtils.getUserId(token);
+        Integer status = borrowerService.getBorrowerStatus(userId);
+        return R.ok().data("borrowerStatus",status);
+    }
 }

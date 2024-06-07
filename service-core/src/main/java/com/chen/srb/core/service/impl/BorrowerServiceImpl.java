@@ -62,6 +62,16 @@ public class BorrowerServiceImpl implements BorrowerService {
         //更新会员状态  borrow_auth_status
         userInfo.setBorrowAuthStatus(BorrowerStatusEnum.AUTH_RUN.getStatus());
         userInfoMapper.updateUserInfo(userInfo);
+    }
 
+    @Override
+    public Integer getBorrowerStatus(Long userId) {
+        List<Object> statusList = borrowerMapper.getBorrowerStatus(userId);
+        if(statusList.size() == 0){
+            //没有借款人信息
+            return BorrowerStatusEnum.NO_AUTH.getStatus();
+        }
+        Integer status = (Integer) statusList.get(0);
+        return status;
     }
 }
