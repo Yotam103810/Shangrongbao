@@ -11,4 +11,6 @@ public interface BorrowerMapper {
     void insertBorrower(@Param("borrower")Borrower borrower);
 
     List<Object> getBorrowerStatus(@Param("userId") Long userId);
+
+    List<Borrower> listPage(@Param("keyword") String keyword);
 }

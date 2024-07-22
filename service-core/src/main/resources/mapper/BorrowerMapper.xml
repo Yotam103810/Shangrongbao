@@ -14,4 +14,13 @@
     <select id="getBorrowerStatus" resultType="java.lang.Object">
         select B.status from borrower B where B.user_id = #{userId} and B.is_deleted = 0
     </select>
+
+    <select id="listPage" resultType="com.chen.srb.core.pojo.entity.Borrower">
+        select * from borrower B where
+            <if test="keyword != null and keyword != ''">
+                (B.name like CONCAT('%' , #{keyword} , '%')
+                OR B.mobile like CONCAT('%' , #{keyword} , '%')
+                OR B.id_card like CONCAT('%' , #{keyword} , '%'))
+            </if>
+    </select>
 </mapper>

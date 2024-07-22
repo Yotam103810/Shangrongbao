@@ -1,5 +1,6 @@
 package com.chen.srb.core.service.impl;
 
+import com.alibaba.excel.util.CollectionUtils;
 import com.chen.srb.core.enums.BorrowerStatusEnum;
 import com.chen.srb.core.mapper.BorrowerAttachMapper;
 import com.chen.srb.core.mapper.BorrowerMapper;
@@ -8,7 +9,9 @@ import com.chen.srb.core.pojo.dto.BorrowerDTO;
 import com.chen.srb.core.pojo.entity.Borrower;
 import com.chen.srb.core.pojo.entity.BorrowerAttach;
 import com.chen.srb.core.pojo.entity.UserInfo;
+import com.chen.srb.core.pojo.vo.BorrowerVO;
 import com.chen.srb.core.service.BorrowerService;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,5 +76,21 @@ public class BorrowerServiceImpl implements BorrowerService {
         }
         Integer status = (Integer) statusList.get(0);
         return status;
+    }
+
+    @Override
+    public BorrowerVO listPage(Integer page, Integer limit, String keyword) {
+        BorrowerVO borrowerVO = new BorrowerVO();
+        List<Borrower> list = borrowerMapper.listPage(keyword);
+        if(CollectionUtils.isEmpty(list)){
+            return borrowerVO;
+        }
+        List<List<Borrower>> partition = Lists.partition(list, limit);
+        borrowerVO.setPageSize(limit);  //每页的条数
+        borrowerVO.setPageNum(page);   //当前页
+        borrowerVO.setPageTotal(partition.size());  //总页数
+        borrowerVO.setTotalSize(list.size());  //总条数
+        borrowerVO.setBorrowerList(partition.get(page - 1));
+        return borrowerVO;
     }
 }

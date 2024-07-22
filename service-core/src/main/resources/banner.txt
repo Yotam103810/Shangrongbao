@@ -1,0 +1,8 @@
+启动成功！
+${AnsiColor.BRIGHT_RED}
+
+╭∩╮（︶︿︶）╭∩╮ 付璐
+
+${AnsiColor.BRIGHT_WHITE}
+欢迎使用～
+spring boot 版本为 ${spring-boot.version}
