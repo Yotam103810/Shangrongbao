@@ -34,9 +34,9 @@ mybatis-plus: #mybatis
         max-idle: 8     #最大空闲连接，默认8
         min-idle: 0     #最小空闲连接，默认0
 
-#spring:
-
-  cloud:
-    nacos:
-    discovery:
-    server-addr: localhost:8848 # nacos服务地址
+##spring:
+#
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: localhost:8848 # nacos服务地址

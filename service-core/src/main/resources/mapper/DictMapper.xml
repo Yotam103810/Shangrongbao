@@ -25,4 +25,39 @@
     <select id="getIdByDictCode" resultType="java.lang.Long">
         select D.id from dict D where D.dict_code = #{dictCode} and D.is_deleted = 0
     </select>
+
+    <select id="getEducation" resultType="java.lang.String">
+        select d1.name
+        from dict d1
+                 inner join dict d2 on d2.id = d1.parent_id
+        where d1.value = #{education} and d2.dict_code = 'education'
+    </select>
+
+    <select id="getIndustry" resultType="java.lang.String">
+        select d1.name
+        from dict d1
+                 inner join dict d2 on d2.id = d1.parent_id
+        where d1.value = #{industry} and d2.dict_code = 'industry'
+    </select>
+
+    <select id="getIncome" resultType="java.lang.String">
+        select d1.name
+        from dict d1
+                 inner join dict d2 on d2.id = d1.parent_id
+        where d1.value = #{income} and d2.dict_code = 'income'
+    </select>
+
+    <select id="getReturnSource" resultType="java.lang.String">
+        select d1.name
+        from dict d1
+        inner join dict d2 on d1.parent_id = d2.id
+        where d1.value = #{returnSource} and d2.dict_code = 'returnSource'
+    </select>
+
+    <select id="getContactsRelation" resultType="java.lang.String">
+        select d1.name
+        from dict d1
+                 inner join dict d2 on d1.parent_id = d2.id
+        where d1.value = #{contactsRelation} and d2.dict_code = 'contactsRelation'
+    </select>
 </mapper>

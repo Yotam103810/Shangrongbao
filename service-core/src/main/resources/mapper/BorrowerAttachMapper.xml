@@ -6,4 +6,8 @@
         insert into borrower_attach (borrower_id,image_type,image_url,image_name,create_time,update_time,is_deleted)
             values (#{borrowerId},#{imageType},#{imageUrl},#{imageName},now(),now(),0)
     </insert>
+
+    <select id="selectBorrowerAttachVOList" resultType="com.chen.srb.core.pojo.vo.BorrowerAttachVO">
+        select B.image_type,B.image_url from borrower_attach B where b.borrower_id = #{borrowerId}
+    </select>
 </mapper>

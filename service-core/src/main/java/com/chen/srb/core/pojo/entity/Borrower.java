@@ -43,8 +43,7 @@ public class Borrower {
     private Integer education;
 
     @ApiModelProperty(value = "是否结婚（1：是 0：否）")
-    @TableField("is_marry")
-    private Boolean marry;
+    private Integer isMarry;
 
     @ApiModelProperty(value = "行业")
     private Integer industry;

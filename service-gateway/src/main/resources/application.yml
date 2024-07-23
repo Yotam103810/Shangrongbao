@@ -5,10 +5,10 @@ spring:
     active: dev # 环境设置
   application:
     name: service-gateway # 服务名
-  cloud:
-    nacos:
-      discovery:
-        server-addr: localhost:8848 # nacos服务地址
+#  cloud:
+#    nacos:
+#      discovery:
+#        server-addr: localhost:8848 # nacos服务地址
   gateway:
     discovery:
       locator:

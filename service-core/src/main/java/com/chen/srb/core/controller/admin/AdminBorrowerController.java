@@ -2,17 +2,16 @@ package com.chen.srb.core.controller.admin;
 
 import com.chen.common.result.R;
 import com.chen.srb.core.pojo.entity.Borrower;
+import com.chen.srb.core.pojo.vo.BorrowerDetailVO;
 import com.chen.srb.core.pojo.vo.BorrowerVO;
 import com.chen.srb.core.service.BorrowerService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +31,20 @@ public class AdminBorrowerController {
                       @RequestParam String keyword){
         BorrowerVO list = borrowerService.listPage(page,limit,keyword);
         return R.ok().data("list",list);
+    }
+
+
+    /**
+     * 获取借款人信息
+     * @param id
+     * @return
+     */
+    @ApiOperation("获取借款人信息")
+    @GetMapping("/show/{id}")
+    public R show(
+            @ApiParam(value = "借款人id", required = true)
+            @PathVariable Long id){
+        BorrowerDetailVO borrowerDetailVO = borrowerService.getBorrowerDetailVOById(id);
+        return R.ok().data("borrowerDetailVo",borrowerDetailVO);
     }
 }

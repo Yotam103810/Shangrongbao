@@ -23,4 +23,12 @@
                 OR B.id_card like CONCAT('%' , #{keyword} , '%'))
             </if>
     </select>
+
+    <select id="getBorrowerDetail" resultType="com.chen.srb.core.pojo.entity.Borrower">
+        select B.id,B.user_id,B.name,B.id_card,B.mobile,B.sex,B.age,B.education,B.is_marry,
+               B.industry,B.income,B.return_source,B.contacts_name,B.contacts_mobile,B.contacts_relation,
+               B.status,B.create_time,B.update_time,B.is_deleted
+        from borrower B
+        where B.id = #{id}
+    </select>
 </mapper>

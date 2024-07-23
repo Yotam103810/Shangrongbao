@@ -19,4 +19,14 @@ public interface DictMapper {
 
 
     Long getIdByDictCode(@Param("dictCode") String dictCode);
+
+    String getEducation(@Param("education") Integer education);
+
+    String getIndustry(@Param("industry") Integer industry);
+
+    String getIncome(@Param("income") Integer income);
+
+    String getReturnSource(@Param("returnSource") Integer returnSource);
+
+    String getContactsRelation(@Param("contactsRelation") Integer contactsRelation);
 }
