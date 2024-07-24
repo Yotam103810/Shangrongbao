@@ -37,4 +37,10 @@
         where id = #{id}
         and is_deleted = 0
     </update>
+
+    <select id="getBorrowAmount" resultType="java.math.BigDecimal">
+        select B.borrow_amount
+        from integral_grade B
+        where #{userIntegral} between B.integral_start and B.integral_end
+    </select>
 </mapper>

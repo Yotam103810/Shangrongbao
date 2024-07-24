@@ -2,14 +2,13 @@ package com.chen.srb.core.service.impl;
 
 import com.alibaba.excel.util.CollectionUtils;
 import com.chen.srb.core.enums.BorrowerStatusEnum;
-import com.chen.srb.core.mapper.BorrowerAttachMapper;
-import com.chen.srb.core.mapper.BorrowerMapper;
-import com.chen.srb.core.mapper.DictMapper;
-import com.chen.srb.core.mapper.UserInfoMapper;
+import com.chen.srb.core.enums.IntegralEnum;
+import com.chen.srb.core.mapper.*;
 import com.chen.srb.core.pojo.dto.BorrowerDTO;
 import com.chen.srb.core.pojo.entity.Borrower;
 import com.chen.srb.core.pojo.entity.BorrowerAttach;
 import com.chen.srb.core.pojo.entity.UserInfo;
+import com.chen.srb.core.pojo.entity.UserIntegral;
 import com.chen.srb.core.pojo.vo.BorrowerApprovalVO;
 import com.chen.srb.core.pojo.vo.BorrowerAttachVO;
 import com.chen.srb.core.pojo.vo.BorrowerDetailVO;
@@ -20,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -38,6 +38,9 @@ public class BorrowerServiceImpl implements BorrowerService {
 
     @Autowired
     private DictMapper dictMapper;
+
+    @Autowired
+    private UserIntegralMapper userIntegralMapper;
 
     @Override
     public void saveBorrower(BorrowerDTO borrowerDTO, Long userId) {
@@ -104,6 +107,7 @@ public class BorrowerServiceImpl implements BorrowerService {
 
 
     @Override
+    @Transactional
     public BorrowerDetailVO getBorrowerDetailVOById(Long id) {
         //根据借款人id查询
         Borrower borrower = borrowerMapper.getBorrowerDetail(id);
@@ -143,11 +147,61 @@ public class BorrowerServiceImpl implements BorrowerService {
     }
 
     @Override
+    @Transactional
     public void approval(BorrowerApprovalVO borrowerApprovalVO) {
 
         //同步认证状态
         Borrower borrowerDetail = borrowerMapper.getBorrowerDetail(borrowerApprovalVO.getBorrowerId());
         borrowerDetail.setStatus(borrowerApprovalVO.getStatus());
         borrowerMapper.updateBorrowerStatus(borrowerDetail);
+
+        //获取用户，修改用户积分记录表和用户基本信息表中的积分
+        Long userId = borrowerDetail.getUserId();
+        UserInfo userInfo = userInfoMapper.selectUserById(userId);
+
+
+        //添加用户基本信息积分到用户积分记录表中
+        UserIntegral userIntegral = new UserIntegral();
+        userIntegral.setUserId(userId);
+        userIntegral.setIntegral(borrowerApprovalVO.getInfoIntegral());
+        userIntegral.setContent("用户基本信息积分");
+        userIntegralMapper.insertUserIntegral(userIntegral);
+
+        int curIntegral = userInfo.getIntegral() + borrowerApprovalVO.getInfoIntegral();
+        //身份证信息是否正确
+        if(borrowerApprovalVO.getIsIdCardOk()){
+            curIntegral += IntegralEnum.BORROWER_IDCARD.getIntegral();
+            userIntegral = new UserIntegral();
+            userIntegral.setUserId(userId);
+            userIntegral.setIntegral(IntegralEnum.BORROWER_IDCARD.getIntegral());
+            userIntegral.setContent(IntegralEnum.BORROWER_IDCARD.getMsg());
+            userIntegralMapper.insertUserIntegral(userIntegral);
+        }
+
+        //房产信息是否正确
+        if(borrowerApprovalVO.getIsHouseOk()){
+            curIntegral += IntegralEnum.BORROWER_HOUSE.getIntegral();
+            userIntegral = new UserIntegral();
+            userIntegral.setUserId(userId);
+            userIntegral.setIntegral(IntegralEnum.BORROWER_HOUSE.getIntegral());
+            userIntegral.setContent(IntegralEnum.BORROWER_HOUSE.getMsg());
+            userIntegralMapper.insertUserIntegral(userIntegral);
+        }
+
+        //车辆信息是否正确
+        if(borrowerApprovalVO.getIsCarOk()){
+            curIntegral += IntegralEnum.BORROWER_CAR.getIntegral();
+            userIntegral = new UserIntegral();
+            userIntegral.setUserId(userId);
+            userIntegral.setIntegral(IntegralEnum.BORROWER_CAR.getIntegral());
+            userIntegral.setContent(IntegralEnum.BORROWER_CAR.getMsg());
+            userIntegralMapper.insertUserIntegral(userIntegral);
+        }
+
+        //修改用户基本信息表中的积分
+        userInfo.setIntegral(curIntegral);
+        //修改用户的审核状态
+        userInfo.setBorrowAuthStatus(borrowerApprovalVO.getStatus());
+        userInfoMapper.updateUserInfoIntegralAndBorrowAuthStatus(userInfo);
     }
 }

@@ -34,7 +34,7 @@
 
     <update id="updateBorrowerStatus">
         update borrower B
-        set B.status = #{status}
+        set B.status = #{status},B.update_time = now()
         where B.id = #{id} and B.is_deleted = 0
     </update>
 </mapper>

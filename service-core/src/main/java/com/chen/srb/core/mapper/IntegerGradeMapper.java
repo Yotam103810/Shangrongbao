@@ -5,6 +5,7 @@ import com.chen.srb.core.pojo.entity.IntegralGrade;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Mapper
@@ -19,4 +20,6 @@ public interface IntegerGradeMapper {
     IntegralGrade getById(@Param("id") Long id);
 
     boolean updateById(IntegralGradeDTO integralGradeDTO);
+
+    BigDecimal getBorrowAmount(@Param("userIntegral") int userIntegral);
 }

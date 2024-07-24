@@ -55,4 +55,11 @@
                 A.borrow_auth_status = #{borrowAuthStatus}
         where A.id = #{id}
     </update>
+
+    <update id="updateUserInfoIntegralAndBorrowAuthStatus">
+        update user_info A
+            set A.borrow_auth_status = #{borrowAuthStatus},
+                A.integral = #{integral}
+        where A.id = #{id}
+    </update>
 </mapper>

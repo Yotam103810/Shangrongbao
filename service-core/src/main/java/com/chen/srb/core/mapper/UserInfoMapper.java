@@ -29,4 +29,6 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
     UserInfo selectUserById(@Param("id") Long valueOf);
 
     void updateUserInfo(UserInfo userInfo);
+
+    void updateUserInfoIntegralAndBorrowAuthStatus(UserInfo userInfo);
 }
