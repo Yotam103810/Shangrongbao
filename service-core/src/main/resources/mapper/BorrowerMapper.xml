@@ -31,4 +31,10 @@
         from borrower B
         where B.id = #{id}
     </select>
+
+    <update id="updateBorrowerStatus">
+        update borrower B
+        set B.status = #{status}
+        where B.id = #{id} and B.is_deleted = 0
+    </update>
 </mapper>

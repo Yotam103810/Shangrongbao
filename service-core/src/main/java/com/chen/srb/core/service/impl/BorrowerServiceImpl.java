@@ -10,6 +10,7 @@ import com.chen.srb.core.pojo.dto.BorrowerDTO;
 import com.chen.srb.core.pojo.entity.Borrower;
 import com.chen.srb.core.pojo.entity.BorrowerAttach;
 import com.chen.srb.core.pojo.entity.UserInfo;
+import com.chen.srb.core.pojo.vo.BorrowerApprovalVO;
 import com.chen.srb.core.pojo.vo.BorrowerAttachVO;
 import com.chen.srb.core.pojo.vo.BorrowerDetailVO;
 import com.chen.srb.core.pojo.vo.BorrowerVO;
@@ -139,5 +140,14 @@ public class BorrowerServiceImpl implements BorrowerService {
         List<BorrowerAttachVO> borrowerAttachList = borrowerAttachMapper.selectBorrowerAttachVOList(id);
         borrowerDetailVO.setBorrowerAttachVOList(borrowerAttachList);
         return borrowerDetailVO;
+    }
+
+    @Override
+    public void approval(BorrowerApprovalVO borrowerApprovalVO) {
+
+        //同步认证状态
+        Borrower borrowerDetail = borrowerMapper.getBorrowerDetail(borrowerApprovalVO.getBorrowerId());
+        borrowerDetail.setStatus(borrowerApprovalVO.getStatus());
+        borrowerMapper.updateBorrowerStatus(borrowerDetail);
     }
 }

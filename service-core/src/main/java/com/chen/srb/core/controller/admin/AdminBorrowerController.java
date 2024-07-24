@@ -2,6 +2,7 @@ package com.chen.srb.core.controller.admin;
 
 import com.chen.common.result.R;
 import com.chen.srb.core.pojo.entity.Borrower;
+import com.chen.srb.core.pojo.vo.BorrowerApprovalVO;
 import com.chen.srb.core.pojo.vo.BorrowerDetailVO;
 import com.chen.srb.core.pojo.vo.BorrowerVO;
 import com.chen.srb.core.service.BorrowerService;
@@ -46,5 +47,17 @@ public class AdminBorrowerController {
             @PathVariable Long id){
         BorrowerDetailVO borrowerDetailVO = borrowerService.getBorrowerDetailVOById(id);
         return R.ok().data("borrowerDetailVo",borrowerDetailVO);
+    }
+
+    /**
+     * 借款人审批
+     * @param borrowerApprovalVO
+     * @return
+     */
+    @ApiOperation("借款人审批")
+    @PostMapping("/approval")
+    public R approval(@RequestBody BorrowerApprovalVO borrowerApprovalVO){
+        borrowerService.approval(borrowerApprovalVO);
+        return R.ok().message("审批成功");
     }
 }
