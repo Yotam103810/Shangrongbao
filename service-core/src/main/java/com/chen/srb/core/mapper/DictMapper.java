@@ -29,4 +29,8 @@ public interface DictMapper {
     String getReturnSource(@Param("returnSource") Integer returnSource);
 
     String getContactsRelation(@Param("contactsRelation") Integer contactsRelation);
+
+    String getMoneyUse(@Param("moneyUse") Integer moneyUse);
+
+    String getReturnMethod(@Param("returnMethod") Integer returnMethod);
 }

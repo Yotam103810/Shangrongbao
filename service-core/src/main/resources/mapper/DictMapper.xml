@@ -60,4 +60,18 @@
                  inner join dict d2 on d1.parent_id = d2.id
         where d1.value = #{contactsRelation} and d2.dict_code = 'contactsRelation'
     </select>
+
+    <select id="getMoneyUse" resultType="java.lang.String">
+        select d1.name
+        from dict d1
+                 inner join dict d2 on d1.parent_id =d2.id
+        where d1.value = #{moneyUse} and d2.dict_code = 'moneyUse'
+    </select>
+
+    <select id="getReturnMethod" resultType="java.lang.String">
+        select d1.name
+        from dict d1
+                 inner join dict d2 on d1.parent_id =d2.id
+        where d1.value = #{returnMethod} and d2.dict_code = 'returnMethod'
+    </select>
 </mapper>
