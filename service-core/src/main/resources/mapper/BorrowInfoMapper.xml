@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chen.srb.core.mapper.BorrowInfoMapper">
+
+    <insert id="insertBorrowInfo">
+        insert into borrow_info(user_id,amount,period,borrow_year_rate,return_method,money_use,status)
+            values (#{userId},#{amount},#{period},#{borrowYearRate},#{returnMethod},#{moneyUse},#{status})
+    </insert>
+
+    <select id="getBorrowerStatus" resultType="java.lang.Object">
+        select B.status from borrow_info B where B.user_id = #{userId}
+    </select>
+</mapper>
