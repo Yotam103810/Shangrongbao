@@ -1,6 +1,7 @@
 package com.chen.srb.core.service;
 
 import com.chen.srb.core.pojo.dto.BorrowInfoDTO;
+import com.chen.srb.core.pojo.vo.BorrowInfoApprovalVO;
 import com.chen.srb.core.pojo.vo.BorrowInfoVo;
 import org.springframework.stereotype.Service;
 
@@ -19,4 +20,6 @@ public interface BorrowerInfoService {
     List<BorrowInfoDTO> list();
 
     Map<String, Object> getBorrowDetailById(Long id);
+
+    void approval(BorrowInfoApprovalVO borrowInfoApprovalVO);
 }

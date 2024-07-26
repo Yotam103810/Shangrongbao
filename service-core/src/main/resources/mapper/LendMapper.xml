@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chen.srb.core.mapper.LendMapper">
+
+    <insert id="insertLend">
+        insert into Lend(user_id, borrow_info_id, lend_no, title, amount, period, lend_year_rate, service_rate,
+                         return_method, lowest_amount, invest_amount, invest_num, publish_date, lend_start_date,
+                         lend_end_date, lend_info, expect_amount, real_amount, status, check_time, check_admin_id,
+                         update_time, is_deleted)
+        values (#{userId}, #{borrowInfoId}, #{lendNo}, #{title}, #{amount}, #{period}, #{lendYearRate}, #{serviceRate},
+                #{returnMethod}, #{lowestAmount}, #{investAmount}, #{investNum}, #{publishDate}, #{lendStartDate},
+                #{lendEndDate}, #{lendInfo}, #{expectAmount}, #{realAmount}, #{status}, #{checkTime}, #{checkAdminId},
+                now(), 0)
+    </insert>
+</mapper>

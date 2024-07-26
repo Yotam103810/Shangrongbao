@@ -11,10 +11,12 @@ import com.chen.srb.core.pojo.dto.BorrowInfoDTO;
 import com.chen.srb.core.pojo.entity.Borrower;
 import com.chen.srb.core.pojo.entity.BorrowerInfo;
 import com.chen.srb.core.pojo.entity.UserInfo;
+import com.chen.srb.core.pojo.vo.BorrowInfoApprovalVO;
 import com.chen.srb.core.pojo.vo.BorrowInfoVo;
 import com.chen.srb.core.pojo.vo.BorrowerDetailVO;
 import com.chen.srb.core.service.BorrowerInfoService;
 import com.chen.srb.core.service.BorrowerService;
+import com.chen.srb.core.service.LendService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +48,9 @@ public class BorrowerInfoServiceImpl implements BorrowerInfoService {
 
     @Autowired
     private BorrowerService borrowerService;
+
+    @Autowired
+    private LendService lendService;
 
     /**
      * 根据userid查出用户积分，再去积分等级表中确认借款额度
@@ -149,5 +154,18 @@ public class BorrowerInfoServiceImpl implements BorrowerInfoService {
         result.put("borrower",borrowerDetailVOById);
 
         return result;
+    }
+
+    @Override
+    public void approval(BorrowInfoApprovalVO borrowInfoApprovalVO) {
+        //修改借款信息表的状态
+        BorrowerInfo borrowerInfo = borrowInfoMapper.selectBorrowInfoById(borrowInfoApprovalVO.getId());
+        borrowerInfo.setStatus(borrowInfoApprovalVO.getStatus());
+        borrowInfoMapper.updateBorrowInfoStatus(borrowerInfo);
+
+        //生成标的
+        if(borrowInfoApprovalVO.getStatus().intValue() == BorrowInfoStatusEnum.CHECK_OK.getStatus().intValue()){
+            lendService.createLend(borrowInfoApprovalVO, borrowerInfo);
+        }
     }
 }

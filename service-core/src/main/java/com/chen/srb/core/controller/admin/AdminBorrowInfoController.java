@@ -3,15 +3,13 @@ package com.chen.srb.core.controller.admin;
 
 import com.chen.common.result.R;
 import com.chen.srb.core.pojo.dto.BorrowInfoDTO;
+import com.chen.srb.core.pojo.vo.BorrowInfoApprovalVO;
 import com.chen.srb.core.service.BorrowerInfoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -38,5 +36,12 @@ public class AdminBorrowInfoController {
     public R show(@PathVariable("id") Long id){
         Map<String,Object> borrowInfoDetail = borrowerInfoService.getBorrowDetailById(id);
         return R.ok().data("borrowInfoDetail",borrowInfoDetail);
+    }
+
+    @ApiOperation("借款审批")
+    @PostMapping("/approval")
+    public R approval(@RequestBody BorrowInfoApprovalVO borrowInfoApprovalVO){
+        borrowerInfoService.approval(borrowInfoApprovalVO);
+        return R.ok().message("审批成功");
     }
 }

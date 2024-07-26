@@ -15,4 +15,6 @@ public interface BorrowInfoMapper {
     List<BorrowerInfo> list();
 
     BorrowerInfo selectBorrowInfoById(@Param("id") Long id);
+
+    void updateBorrowInfoStatus(BorrowerInfo borrowerInfo);
 }

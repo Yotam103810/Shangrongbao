@@ -42,4 +42,10 @@
         where B.id = #{id}
           and B.is_deleted = 0
     </select>
+
+    <update id="updateBorrowInfoStatus">
+        update borrow_info B
+            set B.status = #{status}
+        where B.id = #{id}
+    </update>
 </mapper>
