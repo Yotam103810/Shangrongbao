@@ -1,6 +1,7 @@
 package com.chen.srb.core.service.impl;
 
 import com.chen.srb.core.enums.LendStatusEnum;
+import com.chen.srb.core.mapper.DictMapper;
 import com.chen.srb.core.mapper.LendMapper;
 import com.chen.srb.core.pojo.entity.BorrowerInfo;
 import com.chen.srb.core.pojo.entity.Lend;
@@ -14,12 +15,16 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 public class LendServiceImpl implements LendService {
 
     @Autowired
     private LendMapper lendMapper;
+
+    @Autowired
+    private DictMapper dictMapper;
 
 
     @Override
@@ -69,5 +74,17 @@ public class LendServiceImpl implements LendService {
         lend.setCheckAdminId(1L);
         lendMapper.insertLend(lend);
 
+    }
+
+    @Override
+    public List<Lend> selectList() {
+        List<Lend> lendList = lendMapper.selectList();
+        lendList.forEach(lend -> {
+            String returnMethod = dictMapper.getReturnMethod(lend.getReturnMethod());
+            String status = LendStatusEnum.getMsgByStatus(lend.getStatus());
+            lend.getParam().put("returnMethod",returnMethod);
+            lend.getParam().put("status",status);
+        });
+        return lendList;
     }
 }

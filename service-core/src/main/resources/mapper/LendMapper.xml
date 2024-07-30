@@ -12,4 +12,12 @@
                 #{lendEndDate}, #{lendInfo}, #{expectAmount}, #{realAmount}, #{status}, #{checkTime}, #{checkAdminId},
                 now(), 0)
     </insert>
+
+    <select id="selectList" resultType="com.chen.srb.core.pojo.entity.Lend">
+        select L.id,L.user_id,L.borrow_info_id,L.lend_no,L.title,L.amount,L.period,L.lend_year_rate,L.service_rate,L.return_method,L.lowest_amount,L.invest_amount,
+               L.invest_num,L.publish_date,L.lend_start_date,L.lend_end_date,L.lend_info,L.expect_amount,L.real_amount,
+               L.status,L.check_time,L.check_admin_id,L.payment_time,L.payment_admin_id,L.create_time,L.update_time
+        from lend L
+        where L.is_deleted = 0
+    </select>
 </mapper>
