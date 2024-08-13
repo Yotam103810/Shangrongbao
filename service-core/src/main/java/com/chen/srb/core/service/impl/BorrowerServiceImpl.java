@@ -16,12 +16,15 @@ import com.chen.srb.core.pojo.vo.BorrowerVO;
 import com.chen.srb.core.service.BorrowerService;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -109,40 +112,54 @@ public class BorrowerServiceImpl implements BorrowerService {
     @Override
     @Transactional
     public BorrowerDetailVO getBorrowerDetailVOById(Long id) {
-        //根据借款人id查询
-        Borrower borrower = borrowerMapper.getBorrowerDetail(id);
+        log.info("**************方法入参，{}",id);
+        BorrowerDetailVO borrowerDetailVO = null;
+        try {
 
-        //将查询的借款人信息传递给借款人信息VO对象
-        BorrowerDetailVO borrowerDetailVO = new BorrowerDetailVO();
-        BeanUtils.copyProperties(borrower,borrowerDetailVO);
+            if (ObjectUtils.isEmpty(id) || id < 0){
+                return new BorrowerDetailVO();
+            }
+            //根据借款人id查询
+            Borrower borrower = borrowerMapper.getBorrowerDetail(id);
+            if (ObjectUtils.isEmpty(borrower)){
+                return new BorrowerDetailVO();
+            }
+            //将查询的借款人信息传递给借款人信息VO对象
+            borrowerDetailVO = new BorrowerDetailVO();
+            BeanUtils.copyProperties(borrower,borrowerDetailVO);
 
-        //将借款人信息中的数字替换成对应的描述
-        //性别
-        borrowerDetailVO.setSex(borrower.getSex() == 1 ? "男" : "女");  //integer
-        //是否结婚
-        borrowerDetailVO.setMarry(borrower.getIsMarry() == 1 ? "是" : "否");  //boolean
+            //将借款人信息中的数字替换成对应的描述
+            //性别
+            // Sex -1
+            borrowerDetailVO.setSex(borrower.getSex() == 1 ? "男" : "女");  //integer
+            //是否结婚
+            borrowerDetailVO.setMarry(borrower.getIsMarry() == 1 ? "是" : "否");  //boolean
 
-        //计算下拉列表选中内容
-        String education = dictMapper.getEducation(borrower.getEducation());   //学历
-        String industry = dictMapper.getIndustry(borrower.getIndustry());    //行业
-        String income = dictMapper.getIncome(borrower.getIncome());  //月收入
-        String returnSource = dictMapper.getReturnSource(borrower.getReturnSource());  //还款来源
-        String contactsRelation = dictMapper.getContactsRelation(borrower.getContactsRelation());  //联系人关系
+            //计算下拉列表选中内容
+            String education = dictMapper.getEducation(borrower.getEducation());   //学历
+            String industry = dictMapper.getIndustry(borrower.getIndustry());    //行业
+            String income = dictMapper.getIncome(borrower.getIncome());  //月收入
+            String returnSource = dictMapper.getReturnSource(borrower.getReturnSource());  //还款来源
+            String contactsRelation = dictMapper.getContactsRelation(borrower.getContactsRelation());  //联系人关系
 
-        ////设置下拉列表选中内容
-        borrowerDetailVO.setEducation(education);
-        borrowerDetailVO.setIndustry(industry);
-        borrowerDetailVO.setIncome(income);
-        borrowerDetailVO.setReturnSource(returnSource);
-        borrowerDetailVO.setContactsRelation(contactsRelation);
+            ////设置下拉列表选中内容
+            borrowerDetailVO.setEducation(education);
+            borrowerDetailVO.setIndustry(industry);
+            borrowerDetailVO.setIncome(income);
+            borrowerDetailVO.setReturnSource(returnSource);
+            borrowerDetailVO.setContactsRelation(contactsRelation);
 
-        //审批状态
-        String msgByStatus = BorrowerStatusEnum.getMsgByStatus(borrower.getStatus());
-        borrowerDetailVO.setStatus(msgByStatus);
+            //审批状态
+            String msgByStatus = BorrowerStatusEnum.getMsgByStatus(borrower.getStatus());
+            borrowerDetailVO.setStatus(msgByStatus);
 
-        //获取附件的vo列表
-        List<BorrowerAttachVO> borrowerAttachList = borrowerAttachMapper.selectBorrowerAttachVOList(id);
-        borrowerDetailVO.setBorrowerAttachVOList(borrowerAttachList);
+            //获取附件的vo列表 String ''  , INt -1   ，Boolean false
+            List<BorrowerAttachVO> borrowerAttachList = borrowerAttachMapper.selectBorrowerAttachVOList(id);
+            borrowerDetailVO.setBorrowerAttachVOList(borrowerAttachList);
+        } catch (Exception e) {
+            log.error("*********失败，{}",id,e);
+            throw new RuntimeException(e);
+        }
         return borrowerDetailVO;
     }
 

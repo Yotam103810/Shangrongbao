@@ -1,13 +1,19 @@
 package com.chen.srb.core.service.impl;
 
+import com.alibaba.excel.util.CollectionUtils;
 import com.chen.srb.core.enums.LendStatusEnum;
+import com.chen.srb.core.mapper.BorrowerMapper;
 import com.chen.srb.core.mapper.DictMapper;
 import com.chen.srb.core.mapper.LendMapper;
+import com.chen.srb.core.pojo.entity.Borrower;
 import com.chen.srb.core.pojo.entity.BorrowerInfo;
 import com.chen.srb.core.pojo.entity.Lend;
 import com.chen.srb.core.pojo.vo.BorrowInfoApprovalVO;
+import com.chen.srb.core.pojo.vo.BorrowerDetailVO;
+import com.chen.srb.core.service.BorrowerService;
 import com.chen.srb.core.service.LendService;
 import com.chen.srb.core.util.LendNoUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +21,10 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class LendServiceImpl implements LendService {
@@ -25,6 +34,12 @@ public class LendServiceImpl implements LendService {
 
     @Autowired
     private DictMapper dictMapper;
+
+    @Autowired
+    private BorrowerMapper borrowerMapper;
+
+    @Autowired
+    private BorrowerService borrowerService;
 
 
     @Override
@@ -79,12 +94,56 @@ public class LendServiceImpl implements LendService {
     @Override
     public List<Lend> selectList() {
         List<Lend> lendList = lendMapper.selectList();
+//        lendList.parallelStream().forEach(
+//                lend -> {
+//                    String returnMethod = dictMapper.getReturnMethod(lend.getReturnMethod());
+//                    String status = LendStatusEnum.getMsgByStatus(lend.getStatus());
+//                    lend.getParam().put("returnMethod",returnMethod);
+//                    lend.getParam().put("status",status);
+//                }
+//        );// 嗷嗷快 多线程
+        // 判断空指针
+        if (CollectionUtils.isEmpty(lendList)){
+            return new ArrayList<>();
+        }
         lendList.forEach(lend -> {
             String returnMethod = dictMapper.getReturnMethod(lend.getReturnMethod());
             String status = LendStatusEnum.getMsgByStatus(lend.getStatus());
-            lend.getParam().put("returnMethod",returnMethod);
+
+                lend.getParam().put("returnMethod",returnMethod == null? "":returnMethod);
             lend.getParam().put("status",status);
         });
         return lendList;
+    }
+
+    @Override
+    public Map<String, Object> getLendDetail(Long id) {
+        if(ObjectUtils.isEmpty(id) || id < 0){
+            return new HashMap<>();
+        }
+        //获取标的信息
+        Lend lend = lendMapper.getLendById(id);
+        if(ObjectUtils.isEmpty(lend)){
+            return new HashMap<>();
+        }
+        //组装数据
+        String returnMethod = dictMapper.getReturnMethod(lend.getReturnMethod());
+        String msgByStatus = LendStatusEnum.getMsgByStatus(lend.getStatus());
+        lend.getParam().put("returnMethod",returnMethod);
+        lend.getParam().put("msgByStatus",msgByStatus);
+
+        //根据user_id获取借款人对象
+        Borrower borrower = borrowerMapper.getBorrowerDetailByUserId(lend.getUserId());
+        if(ObjectUtils.isEmpty(borrower)){
+            throw new RuntimeException("borrower对象为空");
+        }
+        BorrowerDetailVO borrowerDetailVOById = borrowerService.getBorrowerDetailVOById(borrower.getId());
+
+        //封装map
+        Map<String,Object> map = new HashMap<>();
+        map.put("lend",lend);
+        map.put("borrower",borrowerDetailVOById);
+
+        return map;
     }
 }

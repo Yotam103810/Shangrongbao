@@ -17,4 +17,6 @@ public interface BorrowerMapper {
     Borrower getBorrowerDetail(@Param("id") Long id);
 
     void updateBorrowerStatus(Borrower borrowerDetail);
+
+    Borrower getBorrowerDetailByUserId(@Param("userId") Long userId);
 }

@@ -18,6 +18,7 @@ import com.chen.srb.core.service.BorrowerInfoService;
 import com.chen.srb.core.service.BorrowerService;
 import com.chen.srb.core.service.LendService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -136,6 +137,7 @@ public class BorrowerInfoServiceImpl implements BorrowerInfoService {
 
     @Override
     public Map<String, Object> getBorrowDetailById(Long id) {
+
         //根据id查询借款信息
         BorrowerInfo borrowerInfo = borrowInfoMapper.selectBorrowInfoById(id);
         String returnMethod = dictMapper.getReturnMethod(borrowerInfo.getReturnMethod());
@@ -158,8 +160,22 @@ public class BorrowerInfoServiceImpl implements BorrowerInfoService {
 
     @Override
     public void approval(BorrowInfoApprovalVO borrowInfoApprovalVO) {
+        // todo 安全校验没有
+        // 安全校验：参数不合法不准许执行
+        if (ObjectUtils.isEmpty(borrowInfoApprovalVO.getId()) || borrowInfoApprovalVO.getId() < 0)
+        {
+            return;
+        }
+        if (ObjectUtils.isEmpty(borrowInfoApprovalVO.getStatus()) || borrowInfoApprovalVO.getStatus() < 0)
+        {
+            return;
+        }
         //修改借款信息表的状态
         BorrowerInfo borrowerInfo = borrowInfoMapper.selectBorrowInfoById(borrowInfoApprovalVO.getId());
+        // 如果 borrowerInfo 为空直接返回
+        if (ObjectUtils.isEmpty(borrowerInfo)){
+            return;
+        }
         borrowerInfo.setStatus(borrowInfoApprovalVO.getStatus());
         borrowInfoMapper.updateBorrowInfoStatus(borrowerInfo);
 
