@@ -1,65 +1,132 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.chen.srb.core.mapper.UserInfoMapper">
-
     <insert id="register">
-        insert into
-            user_info(user_type,mobile,password,nick_name,name,id_card,email,openid,head_img,bind_code,create_time,update_time)
-            values (#{userType},#{mobile},#{password},#{mobile},#{mobile},null,null,null,#{headImg},null,now(),now())
+        insert into user_info(user_type, mobile, password, nick_name, name, id_card, email, openid, head_img, bind_code,
+                              create_time, update_time)
+        values (#{userType}, #{mobile}, #{password}, #{mobile}, #{mobile}, null, null, null, #{headImg}, null, now(),
+                now())
     </insert>
 
     <select id="selectCount" resultType="int">
-        select COUNT(mobile) from user_info where mobile = #{mobile}
+        select COUNT(mobile)
+        from user_info
+        where mobile = #{mobile}
     </select>
 
     <select id="selectIdByMobile" resultType="java.lang.Long">
-        select id from user_info where mobile = #{mobile}
+        select id
+        from user_info
+        where mobile = #{mobile}
     </select>
 
     <select id="selectUser" resultType="com.chen.srb.core.pojo.entity.UserInfo">
-        select A.id,A.user_type,A.mobile,A.password,A.nick_name,A.name,A.id_card,A.email,A.openid,A.head_img,A.bind_status,A.borrow_auth_status,A.bind_code,A.integral,A.status
+        select A.id,
+               A.user_type,
+               A.mobile,
+               A.password,
+               A.nick_name,
+               A.name,
+               A.id_card,
+               A.email,
+               A.openid,
+               A.head_img,
+               A.bind_status,
+               A.borrow_auth_status,
+               A.bind_code,
+               A.integral,
+               A.status
         from user_info A
-        where
-            A.mobile = #{mobile}
-        and A.password = #{password}
-        and A.user_type = #{userType}
+        where A.mobile = #{mobile}
+          and A.password = #{password}
+          and A.user_type = #{userType}
     </select>
 
     <update id="lock">
         update user_info
-            set status = #{status}
+        set status = #{status}
         where user_info.id = #{id}
     </update>
 
     <select id="listPage" resultType="com.chen.srb.core.pojo.entity.UserInfo">
-        select A.id,A.user_type,A.mobile,A.name,A.id_card,A.integral,A.create_time,A.bind_code,A.status
+        select A.id,
+               A.user_type,
+               A.mobile,
+               A.name,
+               A.id_card,
+               A.integral,
+               A.create_time,
+               A.bind_code,
+               A.status
         from user_info A
         where A.user_type = #{userType}
-        and A.mobile = #{monile}
-        and A.status = #{status}
+          and A.mobile = #{monile}
+          and A.status = #{status}
     </select>
 
     <select id="selectUserById" resultType="com.chen.srb.core.pojo.entity.UserInfo">
-        select A.id,A.user_type,A.mobile,A.password,A.nick_name,A.name,A.id_card,A.email,A.openid,A.head_img,A.bind_status,A.borrow_auth_status,A.bind_code,A.integral,A.status,A.create_time,A.update_time,A.is_deleted
+        select A.id,
+               A.user_type,
+               A.mobile,
+               A.password,
+               A.nick_name,
+               A.name,
+               A.id_card,
+               A.email,
+               A.openid,
+               A.head_img,
+               A.bind_status,
+               A.borrow_auth_status,
+               A.bind_code,
+               A.integral,
+               A.status,
+               A.create_time,
+               A.update_time,
+               A.is_deleted
         from user_info A
-        where A.id = #{id} and A.is_deleted = 0
+        where A.id = #{id}
+          and A.is_deleted = 0
     </select>
 
     <update id="updateUserInfo">
         update user_info A
-            set A.bind_code = #{bindCode},
-                A.name = #{name},
-                A.id_card = #{idCard},
-                A.bind_status = #{bindStatus},
-                A.update_time = #{updateTime},
-                A.borrow_auth_status = #{borrowAuthStatus}
+        set A.bind_code          = #{bindCode},
+            A.name               = #{name},
+            A.id_card            = #{idCard},
+            A.bind_status        = #{bindStatus},
+            A.update_time        = #{updateTime},
+            A.borrow_auth_status = #{borrowAuthStatus}
         where A.id = #{id}
     </update>
 
     <update id="updateUserInfoIntegralAndBorrowAuthStatus">
         update user_info A
-            set A.borrow_auth_status = #{borrowAuthStatus},
-                A.integral = #{integral}
+        set A.borrow_auth_status = #{borrowAuthStatus},
+            A.integral           = #{integral}
         where A.id = #{id}
     </update>
+
+    <select id="selectUserInfoByBindCode" resultType="com.chen.srb.core.pojo.entity.UserInfo">
+        select A.id,
+               A.user_type,
+               A.mobile,
+               A.password,
+               A.nick_name,
+               A.name,
+               A.id_card,
+               A.email,
+               A.openid,
+               A.head_img,
+               A.bind_status,
+               A.borrow_auth_status,
+               A.bind_code,
+               A.integral,
+               A.status,
+               A.create_time,
+               A.update_time,
+               A.is_deleted
+        from user_info A
+        where A.bind_code = #{bindCode}
+          and A.is_deleted = 0
+    </select>
 </mapper>

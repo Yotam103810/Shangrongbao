@@ -9,14 +9,14 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-@ApiModel(value="UserAccount对象", description="用户账户")
-public class UserAccount implements Serializable {
+@ApiModel(value="TransFlow对象", description="交易流水表")
+public class TransFlow {
+
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "编号")
@@ -26,11 +26,23 @@ public class UserAccount implements Serializable {
     @ApiModelProperty(value = "用户id")
     private Long userId;
 
-    @ApiModelProperty(value = "帐户可用余额")
-    private BigDecimal amount;
+    @ApiModelProperty(value = "用户名称")
+    private String userName;
 
-    @ApiModelProperty(value = "冻结金额")
-    private BigDecimal freezeAmount;
+    @ApiModelProperty(value = "交易单号")
+    private String transNo;
+
+    @ApiModelProperty(value = "交易类型（1：充值 2：提现 3：投标 4：投资回款 ...）")
+    private Integer transType;
+
+    @ApiModelProperty(value = "交易类型名称")
+    private String transTypeName;
+
+    @ApiModelProperty(value = "交易金额")
+    private BigDecimal transAmount;
+
+    @ApiModelProperty(value = "备注")
+    private String memo;
 
     @ApiModelProperty(value = "创建时间")
     private LocalDateTime createTime;
@@ -43,7 +55,5 @@ public class UserAccount implements Serializable {
     @TableLogic
     private Boolean deleted;
 
-    @ApiModelProperty(value = "版本号")
-    private Integer version;
 
 }

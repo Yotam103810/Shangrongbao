@@ -7,4 +7,11 @@
             user_account(user_id,amount,freeze_amount,create_time,update_time,is_deleted,version)
             values (#{userId},IFNULL(amount,0),IFNULL(freeze_amount,0),now(),now(),0,0)
     </insert>
+
+    <update id="updateAccount">
+        update user_account
+            set amount = #{amount},
+                freeze_amount = #{freezeAmount}
+        where user_id = (select id from user_info where bind_code = #{bindCode})
+    </update>
 </mapper>

@@ -31,4 +31,6 @@ public interface UserInfoMapper extends BaseMapper<UserInfo> {
     void updateUserInfo(UserInfo userInfo);
 
     void updateUserInfoIntegralAndBorrowAuthStatus(UserInfo userInfo);
+
+    UserInfo selectUserInfoByBindCode(@Param("bindCode") String bindCode);
 }
